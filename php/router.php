@@ -32,5 +32,6 @@ if ($url[1] == "game") {
 }
 
 // если content не пустой 
-if (!empty($content))
+if (!empty($content)) 
 	require_once("template.php");
+// У меня опять проблемка Главная страница сайта отоброжается только с http://alex-lei.ru/menu но в router это не указано 

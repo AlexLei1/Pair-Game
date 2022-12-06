@@ -1,1 +1,1 @@
-<?php require_once("php/router.php"); // Домашняя страница
+<?php require_once("router.php"); // Домашняя страница
