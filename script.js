@@ -1,58 +1,31 @@
 // получаем компоненты html
-const cube = document.querySelector('.cube')
-const items = Array.from(cube.querySelectorAll('.cube-item'))
-const itemsNum = Array.from(cube.querySelectorAll('.num'))
-let arrButtonActive = []
-let buttonItem = null
+const cube = document.querySelector('.cube');
+const items = Array.from(cube.querySelectorAll('.cube-item'));
+const itemsNum = Array.from(cube.querySelectorAll('.num'));
+const gameBtn = document.querySelector('#game');
+
 
 // Формируем матрицу
 let matrix = getMatrix(items.map((item) => Number(item.dataset.matrixId)))
 setPositionItems(matrix)
 
 // Создаем событие кнопке mix
-document.querySelector('.btn').addEventListener('click', () => {
+document.querySelector('#mix').addEventListener('click', () => {
 	mixing()
 })
 
 // Проверка на соответствие количества элементов item (для распознования игры которую мы выбрали)
 if (items.length === 16) {
-	// Игровой процесс
-	cube.addEventListener('click', (event) => {
-		// Получаем элемент матрицы
-		buttonItem = event.target.closest('button'); 
-		// Если элемент уже был получен, прекрощаем событие
-		if (buttonItem === null) {
-			return
-		}
-		
-		// Присваеваем стили для трансформации элемента
-		buttonItem.style.transform = buttonItem.style.transform.replaceAll(/180deg/g, '0deg'); 
-		buttonItem.children[0].style.color = '#fff';
-		buttonItem.id = 'active'; 
-		arrButtonActive.push(buttonItem.children[0].textContent);
-
-		// Подучаем индекс предпоследнего и последнего элемента массива arrButtonActive
-		let indexButtonNode1 = arrButtonActive.length - 2
-		let indexButtonNode2 = arrButtonActive.length - 1
-		
-		// Если активно 2 элемента и их значения не равны
-		if ((arrButtonActive.length % 2 === 0) && (arrButtonActive[indexButtonNode1] !== arrButtonActive[indexButtonNode2])){
-			mixing()
-			arrButtonActive.length = 0;
-			return console.log(`мимо, попробуй еще раз ${arrButtonActive}`)
-
-		// Если активно 2 элемента и число активных элементов равно 16
-		} else if ((arrButtonActive.length % 2 === 0) && (arrButtonActive.length === 16)){
-			mixing()
-			return console.log('вы выйграли')
-
-		// Если активно 2 элемента и их значения равны
-		} else if ((arrButtonActive.length % 2 === 0) && (arrButtonActive[indexButtonNode1] === arrButtonActive[indexButtonNode2])) {
-			return console.log(`в цель, играй дальше ${arrButtonActive}`)
-		} else {
-			return
-		}
-	});
+	gameBtn.addEventListener('click', (event) => {
+		showItems()
+		setTimeout(() => {
+			for(let i = 0; i < itemsNum.length; i++){
+				itemsNum[i].style.opacity = `0`;
+			}
+		}, 5000)
+		pairGame()
+		event.target.disabled = true
+	})
 } else if (items.length === 15) {
 
 } else {
@@ -60,6 +33,19 @@ if (items.length === 16) {
 }
 
 /* Функции помошники */
+
+// Функция показывает эллементы 
+function showItems() {
+	for(let i = 0; i < itemsNum.length; i++){
+			itemsNum[i].style.opacity = `1`;
+	}
+}
+// Функция скрывает эллементы 
+function hidesItem() {
+	for(let i = 0; i < itemsNum.length; i++){
+		itemsNum[i].style.opacity = `0`;
+	}
+}
 
 // Функция формирует матрицу из массива
 function getMatrix(arr){
@@ -93,9 +79,9 @@ function setPositionItems(matrix) {
 function setNodeStyles(node, x, y) {
 	const shiftPs = 100;
 	const RotatePs = 180
-
+	
 	node.style.transform = `translate3D(${x * shiftPs}%, ${y * shiftPs}%,  0) rotateY(${RotatePs}deg)`
-	node.children[0].style.color = `black`
+	node.children[0].style.opacity = `0`
 	node.removeAttribute('id');
 }
 
@@ -112,4 +98,46 @@ function mixing(){
 	const shuffledArray = shuffleArray(matrix.flat())
 	matrix = getMatrix(shuffledArray);
 	setPositionItems(matrix);
+}
+
+// Функция с логикой игры
+function pairGame() {
+	let arrButtonActive = []
+	let buttonItem = null
+	cube.addEventListener('click', (event) => {
+		// Получаем элемент матрицы
+		buttonItem = event.target.closest('button'); 
+		// Если элемент уже был получен, прекрощаем событие
+		if (buttonItem === null) {
+			return
+		}
+		
+		// Присваеваем стили для трансформации элемента
+		buttonItem.style.transform = buttonItem.style.transform.replaceAll(/180deg/g, '0deg'); 
+		buttonItem.children[0].style.opacity = `1`;
+		buttonItem.id = 'active'; 
+		arrButtonActive.push(buttonItem.children[0].textContent);
+
+		// Подучаем индекс предпоследнего и последнего элемента массива arrButtonActive
+		let indexButtonNode1 = arrButtonActive.length - 2
+		let indexButtonNode2 = arrButtonActive.length - 1
+		
+		// Если активно 2 элемента и их значения не равны
+		if ((arrButtonActive.length % 2 === 0) && (arrButtonActive[indexButtonNode1] !== arrButtonActive[indexButtonNode2])){
+			mixing()
+			arrButtonActive.length = 0;
+			console.log(`мимо, попробуй еще раз ${arrButtonActive}`)
+			return gameBtn.disabled = false
+
+		// Если активно 2 элемента и число активных элементов равно 16
+		} else if ((arrButtonActive.length % 2 === 0) && (arrButtonActive.length === 16)){
+			mixing()
+			console.log('вы выйграли')
+			return gameBtn.disabled = false
+
+		// Если активно 2 элемента и их значения равны
+		} else if ((arrButtonActive.length % 2 === 0) && (arrButtonActive[indexButtonNode1] === arrButtonActive[indexButtonNode2])) {
+			 console.log(`в цель, играй дальше ${arrButtonActive}`)
+		} 
+	});
 }
