@@ -1,0 +1,117 @@
+<h1 class="title">Register</h1>
+<div class="blok">
+  <form onsubmit="sendForm(this); return false;">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <span class="material-symbols-outlined"> person </span>
+        </div>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="nickname"
+        required
+        name="nickname"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <span class="material-symbols-outlined"> mail </span>
+        </div>
+      </div>
+      <input
+        type="email"
+        class="form-control"
+        placeholder="E-mail"
+        required
+        name="email"
+      />
+      <p id="info"></p>
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <span class="material-symbols-outlined"> key </span>
+        </div>
+      </div>
+      <input
+        type="password"
+        class="form-control"
+        placeholder="password"
+        required
+        id="formPass"
+        name="password"
+      />
+      <div class="eye">
+        <span
+          onmousedown="formPass.type='text'; this.nextElementSibling.hidden=false; this.hidden=true;"
+          class="material-symbols-outlined key"
+          >visibility
+        </span>
+        <span
+          class="material-symbols-outlined key"
+          hidden
+          onmouseup="formPass.type='password'; this.previousElementSibling.hidden=false; this.hidden=true;"
+          >visibility_off
+        </span>
+      </div>
+    </div>
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" required />
+      <label class="form-check-label" for="autoSizingCheck2">
+        I agree to the processing of data
+      </label>
+    </div>
+    <input
+      type="submit"
+      class="btn btn-lg btn-success btn-block"
+      value="Зарегистрироваться"
+    />
+  </form>
+</div>
+<!-- Модальное окно -->
+<div
+  class="modal fade"
+  id="myModal"
+  data-backdrop="static"
+  data-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">
+          Вы успешно зарегистрированы.
+        </h5>
+      </div>
+      <div class="modal-body">
+        И будете перенаправлены на страницу авторизации через 3 секунды.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function sendForm(form) {
+    info.innerText = "";
+    let formData = new FormData(form);
+
+    let response = await fetch("addUser", {
+      method: "POST",
+      body: formData,
+    });
+    let res = await response.json();
+    if (res.result === "success") {
+      $("#myModal").modal("show");
+      setTimeout(() => {
+        location.href = "auth";
+      }, 3000);
+    } else if (res.result === "exist") {
+      info.innerText = "Такой пользователь уже есть!";
+    }
+  }
+</script>

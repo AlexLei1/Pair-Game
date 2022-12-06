@@ -1,0 +1,101 @@
+<h1 class="text-center">Authorization</h1>
+<div class="col-md-6 mx-auto mt-4">
+  <form onsubmit="sendFormUser(this); return false;">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <span class="material-symbols-outlined"> mail </span>
+        </div>
+      </div>
+      <input
+        type="email"
+        class="form-control"
+        placeholder="E-mail"
+        required
+        name="email"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <span class="material-symbols-outlined"> key </span>
+        </div>
+      </div>
+      <input
+        type="password"
+        class="form-control"
+        placeholder="password"
+        id="formPass"
+        required
+        name="password"
+      />
+      <div class="eye">
+        <span
+          onmousedown="formPass.type='text'; this.nextElementSibling.hidden=false; this.hidden=true;"
+          class="material-symbols-outlined key"
+          >visibility
+        </span>
+        <span
+          class="material-symbols-outlined key"
+          hidden
+          onmouseup="formPass.type='password'; this.previousElementSibling.hidden=false; this.hidden=true;"
+          >visibility_off
+        </span>
+      </div>
+    </div>
+    <p id="info"></p>
+    <input
+      type="submit"
+      class="btn-xl btn-success form-control"
+      value="Авторизироваться"
+    />
+  </form>
+</div>
+<!-- Модальное окно -->
+<div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="staticBackdropLabel">
+					Вы успешно авторизировались.
+				</h5>
+			</div>
+			<div class="modal-body">
+        Вы будете перенаправлены на страницу пользователя
+      </div>
+		</div>
+	</div>
+</div>
+
+<script>
+  async function sendForm(form) {
+		info.innerText = "";
+		// Записываем данные формы в переменную formDtat
+		let formData = new FormData(form);
+		//-------------------------------------------------
+		// Делаем запрос на сервер для отправки формы
+		let response = await fetch("authUser", {
+			method: "POST",
+			body: formData,
+		});
+		// Получаем данные в формате json
+		let res = await response.json();
+		// Работем с данными
+		if (res.result === "success") {
+			$("#myModal").modal("show");
+			setTimeout(() => {
+        location.href = "/pages/account";
+      }, 3000);
+			document.querySelector('[name="email"]').value = '';
+			document.querySelector('[name="password"]').value = '';
+		} else if (res.result === "exist") {
+			info.innerText = "Неверный пароль!";
+			document.querySelector('[name="email"]').value = '';
+			document.querySelector('[name="password"]').value = '';
+		} else if (res.result === 'error') {
+			info.innerText = "Такого пользователя нет!"
+			document.querySelector('[name="email"]').value = '';
+			document.querySelector('[name="password"]').value = '';
+		}
+	}
+</script>
