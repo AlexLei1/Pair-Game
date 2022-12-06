@@ -23,10 +23,6 @@ if ($url[1] == "game") {
 	echo User::addUser($_POST["nickname"], $_POST["email"], $_POST["password"]);
 } else if ($url[1] == 'authUser') {
 	echo User::authUser($_POST["email"], $_POST["password"]);
-} else if ($url[1] == 'getUser') {
-	echo User::getUser($_SESSION["id"]);
-} else if ($url[1] == 'getUsers') {
-	echo User::getUsers();
 } else {
 	$content = file_get_contents("../pages/main.html");
 }
