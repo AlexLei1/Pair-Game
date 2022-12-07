@@ -1,0 +1,65 @@
+html,
+body {
+	height: 100%; /* Область видимоти 100% */
+	line-height: 1; /* межстрочный интервал текста*/
+	font-family: Montserrat;
+	font-size: 13px;
+	color: #181818;
+}
+.wrapper {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+/* pair-game */
+.title {
+	font-size: 3rem;
+}
+
+.blok{
+	min-width: 400px;
+	padding: 2rem;
+	margin: 0 auto;
+	text-align: center;
+	user-select: none;
+}
+
+.cube{
+	width: 100%;
+	padding-bottom: 100%;
+	margin-bottom: 1.5rem;
+	position: relative;
+}
+
+.cube .cube-item{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 25%;
+	height: 25%;
+	background-color: black;
+	color: #fff;
+	font-size: 2rem;
+	cursor: pointer;
+	box-shadow: inset 1px 1px #ffffff;
+	transition: transform 0.3s ease-out;
+	transform: rotateY(180deg);
+}
+
+.blok-btn {
+	display: flex;
+}
+
+.num {
+	pointer-events: none;
+	transition: .3s ease-out;
+}
+#active {
+	pointer-events: none;
+	box-shadow: inset 1px 1px #00ff5e;
+}
+
+

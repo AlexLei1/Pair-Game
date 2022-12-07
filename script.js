@@ -9,12 +9,12 @@ const gameBtn = document.querySelector('#game');
 let matrix = getMatrix(items.map((item) => Number(item.dataset.matrixId)))
 setPositionItems(matrix)
 
-// Создаем событие кнопке mix
+// Задаем событие кнопке mix
 document.querySelector('#mix').addEventListener('click', () => {
 	mixing()
 })
 
-// Проверка на соответствие количества элементов item (для распознования игры которую мы выбрали)
+// Проверка на соответствие количества элементов item (это потребуется для добавления игры Tap-game)
 if (items.length === 16) {
 	gameBtn.addEventListener('click', (event) => {
 		showItems()
@@ -34,13 +34,13 @@ if (items.length === 16) {
 
 /* Функции помошники */
 
-// Функция показывает эллементы 
+// Функция показывает элементы матрицы
 function showItems() {
 	for(let i = 0; i < itemsNum.length; i++){
 			itemsNum[i].style.opacity = `1`;
 	}
 }
-// Функция скрывает эллементы 
+// Функция скрывает элементы матрицы
 function hidesItem() {
 	for(let i = 0; i < itemsNum.length; i++){
 		itemsNum[i].style.opacity = `0`;
@@ -75,7 +75,7 @@ function setPositionItems(matrix) {
 	}
 }
 
-// Функция добавляет стиль элементу с вычислиными значениями
+// Функция добавляет стиль элементу с вычисленными значениями
 function setNodeStyles(node, x, y) {
 	const shiftPs = 100;
 	const RotatePs = 180
